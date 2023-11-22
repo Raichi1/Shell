@@ -18,13 +18,17 @@ std::any finalVisitorImpl::visitStatement(finalParser::StatementContext *ctx){
 }
 
 std::any finalVisitorImpl::visitVarVariable(finalParser::VarVariableContext *ctx){
-    std::cout<<"visitVarVariable\n";
-    return visitChildren(ctx);
+    std::string key= ctx->ID()->getText();
+    llvm::Value *val = std::any_cast<llvm::Value*>(visit(ctx->expression()));
+    memory[key]=val;
+    return std::any();
 }
 
 std::any finalVisitorImpl::visitAsiggn(finalParser::AsiggnContext *ctx){
-    std::cout<<"visitAsiggn\n";
-    return visitChildren(ctx);
+    std::string key= ctx->ID()->getText();
+    llvm::Value *val = std::any_cast<llvm::Value*>(visit(ctx->expression()));
+    memory[key]=val;
+    return std::any();
 }
 
 std::any finalVisitorImpl::visitFunc(finalParser::FuncContext *ctx){
@@ -39,6 +43,7 @@ std::any finalVisitorImpl::visitArg_func(finalParser::Arg_funcContext *ctx){
 
 std::any finalVisitorImpl::visitForSentence(finalParser::ForSentenceContext *ctx){
     std::cout<<"visitForSentence\n";
+
     return visitChildren(ctx);
 }
 
@@ -48,13 +53,57 @@ std::any finalVisitorImpl::visitWhileSentence(finalParser::WhileSentenceContext 
 }
 
 std::any finalVisitorImpl::visitIfelse(finalParser::IfelseContext *ctx){
-    std::cout<<"visitIfelse\n";
-    return visitChildren(ctx);
+    // std::cout<<"visitIfelse\n";
+    llvm::Value *bCondition = std::any_cast<llvm::Value *>(visit(ctx->expression()));
+
+    llvm::FunctionType *FT = llvm::FunctionType::get(builder->getVoidTy(), false);
+    llvm::Function *F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage, "_anonIFELSE_", module.get());
+
+    llvm::BasicBlock *BB = llvm::BasicBlock::Create(*context, "entry", F);
+    builder->SetInsertPoint(BB);
+
+    llvm::BasicBlock* TB = llvm::BasicBlock::Create(*context, "then_Block", F);
+    llvm::BasicBlock* EB = llvm::BasicBlock::Create(*context, "else_Block", F);
+    llvm::BasicBlock* MB = llvm::BasicBlock::Create(*context, "merge_Block", F);
+
+    builder->CreateCondBr(bCondition, TB, EB);
+
+    // Construir el bloque 'then'
+    builder->SetInsertPoint(TB);
+    visit(ctx->statement(0));
+    builder->CreateBr(MB);
+
+    // Construir el bloque 'else'
+    builder->SetInsertPoint(EB);
+    visit(ctx->statement(1));
+    builder->CreateBr(MB);
+
+    builder->SetInsertPoint(MB);
+
+    return nullptr;
 }
 
 std::any finalVisitorImpl::visitIf(finalParser::IfContext *ctx){
-    std::cout<<"visitIf\n";
-    return visitChildren(ctx);
+    // std::cout<<"visitIf\n";
+    llvm::Value *bCondition = std::any_cast<llvm::Value *>(visit(ctx->expression()));
+
+    llvm::FunctionType *FT = llvm::FunctionType::get(builder->getVoidTy(), false);
+    llvm::Function *F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage, "_anonIF_", module.get());
+
+    llvm::BasicBlock *BB = llvm::BasicBlock::Create(*context, "entry", F);
+    builder->SetInsertPoint(BB);
+
+    llvm::BasicBlock* TB = llvm::BasicBlock::Create(*context, "then_Block", F);
+    llvm::BasicBlock* MB = llvm::BasicBlock::Create(*context, "fi_Block", F);
+
+    builder->CreateCondBr(bCondition, TB, MB);
+
+    // Construir el bloque 'then'
+    builder->SetInsertPoint(TB);
+    visit(ctx->statement(0));
+    builder->CreateBr(MB);
+    builder->SetInsertPoint(MB);
+    return nullptr;
 }
 
 std::any finalVisitorImpl::visitPrint(finalParser::PrintContext *ctx){
@@ -128,8 +177,9 @@ std::any finalVisitorImpl::visitPlusMinus(finalParser::PlusMinusContext *ctx){
 }
 
 std::any finalVisitorImpl::visitIdentifier(finalParser::IdentifierContext *ctx){
-    std::cout<<"visitIdentifier\n";
-    return visitChildren(ctx);
+    std::string key = ctx->ID()->getText();
+    if(memory.count(key)) return std::any(memory[key]);
+    return std::any(0);
 }
 
 std::any finalVisitorImpl::visitNumber(finalParser::NumberContext *ctx){

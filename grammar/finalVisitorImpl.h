@@ -85,9 +85,9 @@ public:
 private:
     std::map<std::string, std::any> memory;
     std::map<std::string, std::any> externVar;
-	std::unique_ptr<llvm::LLVMContext> context;
-	std::unique_ptr<llvm::Module> module;
-	std::unique_ptr<llvm::IRBuilder<>> builder;
+	  std::unique_ptr<llvm::LLVMContext> context;
+	  std::unique_ptr<llvm::Module> module;
+	  std::unique_ptr<llvm::IRBuilder<>> builder;
 };
 
 #endif

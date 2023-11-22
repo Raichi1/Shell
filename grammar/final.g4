@@ -42,7 +42,7 @@ whileLoop
     ;
 
 ifStatement
-    : IF expression THEN statement+ (ELSE statement+)? FI   #ifelse
+    : IF expression THEN statement+ ELSE statement+ FI      #ifelse
     | IF expression THEN statement+ FI                      #if
     ;
 
