@@ -8,7 +8,6 @@
 #include "grammar/finalVisitorImpl.h"
 #include "antlr4-runtime.h"
 
-// Estilos de texto
 #define RESET   "\033[0m"
 #define BOLD    "\033[1m"
 #define DIM     "\033[2m"
@@ -17,7 +16,6 @@
 #define REVERSE "\033[7m"
 #define HIDDEN  "\033[8m"
 
-// Colores de texto
 #define BLACK   "\033[30m"
 #define RED     "\033[31m"
 #define GREEN   "\033[32m"
