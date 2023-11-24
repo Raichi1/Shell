@@ -15,5 +15,7 @@ To run the program you need to have cmake, llvm 17, cplusplus and antlr4.
 First, you need to go to the folder containing the .g4 file. Then, run the antlr4 (.g4) file with the following command:
 
 	```bash
+ 
 	antlr4 -no-listener -visitor -o libs -Dlanguage=Cpp *.g4
+ 
 	```
