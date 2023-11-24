@@ -8,6 +8,26 @@
 #include "grammar/finalVisitorImpl.h"
 #include "antlr4-runtime.h"
 
+// Estilos de texto
+#define RESET   "\033[0m"
+#define BOLD    "\033[1m"
+#define DIM     "\033[2m"
+#define UNDERLINE "\033[4m"
+#define BLINK   "\033[5m"
+#define REVERSE "\033[7m"
+#define HIDDEN  "\033[8m"
+
+// Colores de texto
+#define BLACK   "\033[30m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define BLUE    "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN    "\033[36m"
+#define WHITE   "\033[37m"
+
+
 
 int main(int argc, char **argv) {
 	finalVisitorImpl eval;
@@ -23,7 +43,8 @@ int main(int argc, char **argv) {
 	std::string mSetence= "";
 
 	while(1){
-		std::cout<<((!mulS)?user:">>>")<<">";
+		std::cout<<((!mulS)?BLINK:BOLD)<<((!mulS)?CYAN:WHITE)<<((!mulS)?user:">>>")<<"> "<<RESET;
+		std::cout<<((!mulS)?BLINK:BOLD);
 		std::getline(std::cin,sentence);
 		if(mulS){
 			if(sentence=="<block>"){

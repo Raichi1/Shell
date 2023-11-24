@@ -84,6 +84,7 @@ public:
 
 private:
     std::map<std::string, std::any> memory;
+    std::map<std::string, std::any> functions;
     std::map<std::string, std::any> externVar;
 	  std::unique_ptr<llvm::LLVMContext> context;
 	  std::unique_ptr<llvm::Module> module;
