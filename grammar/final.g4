@@ -51,7 +51,7 @@ printStatement
     ;     
 
 envVariableDeclaration
-    : ENV ID EQ expression ';'                              #EnvVariable
+    : ENV ID EQ PATH ';'                              #EnvVariable
     ;
 
 list
@@ -134,4 +134,5 @@ BACK: '..';
 
 NUMBER: '-'? ('.' [0-9]+|[0-9]+ ('.' [0-9]*)? );
 ID: [a-zA-Z0-9]+('.'[a-zA-Z]+)*;
+PATH: ('/'[a-zA-Z0-9]*)+;
 WS: [ \t\n\r\f]+ -> skip ;
