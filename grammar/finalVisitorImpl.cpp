@@ -21,14 +21,14 @@ std::any finalVisitorImpl::visitVarVariable(finalParser::VarVariableContext *ctx
     std::string key= ctx->ID()->getText();
     llvm::Value *val = std::any_cast<llvm::Value*>(visit(ctx->expression()));
     memory[key]=val;
-    return std::any();
+    return nullptr;
 }
 
 std::any finalVisitorImpl::visitAsiggn(finalParser::AsiggnContext *ctx){
     std::string key= ctx->ID()->getText();
     llvm::Value *val = std::any_cast<llvm::Value*>(visit(ctx->expression()));
     memory[key]=val;
-    return std::any();
+    return nullptr;
 }
 
 std::any finalVisitorImpl::visitFunc(finalParser::FuncContext *ctx){
@@ -43,8 +43,15 @@ std::any finalVisitorImpl::visitArg_func(finalParser::Arg_funcContext *ctx){
 
 std::any finalVisitorImpl::visitForSentence(finalParser::ForSentenceContext *ctx){
     std::cout<<"visitForSentence\n";
-
-    return visitChildren(ctx);
+    std::string key = ctx->ID()->getText();
+    bool defined = (memory.count(key))?1:0;
+    std::vector<llvm::Value *> vals = std::any_cast<std::vector<llvm::Value *>>(visit(ctx->list()));
+    for(llvm::Value* e: vals){
+        memory[key] = e;
+        for(auto e: ctx->statement()) visit(e);
+    }
+    if(!defined)memory.erase(key);
+    return nullptr;
 }
 
 std::any finalVisitorImpl::visitWhileSentence(finalParser::WhileSentenceContext *ctx){
@@ -107,7 +114,7 @@ std::any finalVisitorImpl::visitIf(finalParser::IfContext *ctx){
 }
 
 std::any finalVisitorImpl::visitPrint(finalParser::PrintContext *ctx){
-    std::cout<<"visitPrintExpr\n";
+    // std::cout<<"visitPrintExpr\n";
     std::vector<double> Args;
     std::vector<llvm::Type *> Doubles(Args.size(), llvm::Type::getDoubleTy(*context));
 
@@ -117,7 +124,9 @@ std::any finalVisitorImpl::visitPrint(finalParser::PrintContext *ctx){
 
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(*context, "entry", F);
     builder->SetInsertPoint(BB);
+
     llvm::Value *val = std::any_cast<llvm::Value *>(visit(ctx->expression()));
+    
     builder->CreateRet(val);
 	return nullptr;
 }
@@ -128,8 +137,12 @@ std::any finalVisitorImpl::visitEnvVariable(finalParser::EnvVariableContext *ctx
 }
 
 std::any finalVisitorImpl::visitLista(finalParser::ListaContext *ctx){
-    std::cout<<"visitLista\n";
-    return visitChildren(ctx);
+    std::vector<llvm::Value *> values;
+    for(auto e: ctx->expression()){
+        llvm::Value* vl= std::any_cast<llvm::Value *>(visit(e));
+        values.push_back(vl);
+    }
+    return std::any(values);
 }
 
 std::any finalVisitorImpl::visitFiles(finalParser::FilesContext *ctx){
@@ -171,15 +184,16 @@ std::any finalVisitorImpl::visitPlusMinus(finalParser::PlusMinusContext *ctx){
     }else{
         llvm::Value *LI = builder->CreateFPToSI(L, builder->getInt64Ty());
         llvm::Value *RI = builder->CreateFPToSI(R, builder->getInt64Ty());
-        llvm::Value *RS = builder->CreateFRem(LI, RI);//POR SOLUCIONAR
+        llvm::Value *RS = builder->CreateFRem(LI, RI);
         return std::any(builder->CreateSIToFP(RS, builder->getDoubleTy()));
     }
 }
 
 std::any finalVisitorImpl::visitIdentifier(finalParser::IdentifierContext *ctx){
+    // std::cout<<"identifier\n";
     std::string key = ctx->ID()->getText();
     if(memory.count(key)) return std::any(memory[key]);
-    return std::any(0);
+    return std::any(nullptr);
 }
 
 std::any finalVisitorImpl::visitNumber(finalParser::NumberContext *ctx){
