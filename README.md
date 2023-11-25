@@ -1,6 +1,10 @@
 # Shell
+## Members
+- Renzo Andree Espíritu Cueva
+- Sebastian Aaron Guevara Dominguez
 ## Index
 - [Shell](#Shell)
+	- [Members](#Members)
 	- [Índice](#Index)
 	- [Description](#Description)
  	- [Features](#Features) 
