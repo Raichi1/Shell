@@ -46,7 +46,7 @@ std::any finalVisitorImpl::visitFunc(finalParser::FuncContext *ctx){
 }
 
 std::any finalVisitorImpl::visitArg_func(finalParser::Arg_funcContext *ctx){
-    std::cout<<"visitArg_func\n";
+    // std::cout<<"visitArg_func\n";
     std::vector<std::string> parameters;
     for(auto e:  ctx->ID()){
         parameters.push_back(e->getText());
@@ -55,7 +55,7 @@ std::any finalVisitorImpl::visitArg_func(finalParser::Arg_funcContext *ctx){
 }
 
 std::any finalVisitorImpl::visitForSentence(finalParser::ForSentenceContext *ctx){
-    std::cout<<"visitForSentence\n";
+    // std::cout<<"visitForSentence\n";
     std::string key = ctx->ID()->getText();
     bool defined = (memory.count(key))?1:0;
     std::vector<llvm::Value *> vals = std::any_cast<std::vector<llvm::Value *>>(visit(ctx->list()));
@@ -68,28 +68,30 @@ std::any finalVisitorImpl::visitForSentence(finalParser::ForSentenceContext *ctx
 }
 
 std::any finalVisitorImpl::visitWhileSentence(finalParser::WhileSentenceContext *ctx){ // Solucionar
-    std::cout<<"visitWhileSentence\n";
+    // std::cout<<"visitWhileSentence\n";
+    
     llvm::Value* comp = std::any_cast<llvm::Value*>(visit(ctx->expression()));
+    // std::cout<<"function\n";
+    llvm::FunctionType *FT = llvm::FunctionType::get(builder->getVoidTy(), false);
+    llvm::Function *F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage, "_anonWhile_", module.get());
 
-    std::cout<<"function\n";
-    llvm::Function* F = builder->GetInsertBlock()->getParent();
-
-    std::cout<<"block\n";
+    // std::cout<<"block\n";
     llvm::BasicBlock *loopBlock = llvm::BasicBlock::Create(*context, "loop", F);
     llvm::BasicBlock *endBlock = llvm::BasicBlock::Create(*context, "end", F);
     
     builder->CreateCondBr(comp, loopBlock, endBlock);
 
     builder->SetInsertPoint(loopBlock);
-    std::cout<<"loop\n";
+    // std::cout<<"loop\n";
     for(auto e: ctx->statement()) visit(e);
-
-    llvm::Value * ncomp = std::any_cast<llvm::Value *>(ctx->expression());
+    // std::cout<<"Before ncompare\n";
+    llvm::Value * ncomp = std::any_cast<llvm::Value *>(visit(ctx->expression()));
     builder->CreateCondBr(ncomp, loopBlock,endBlock);
-    std::cout<<"ncompare\n";
+    // std::cout<<"ncompare\n";
     builder->SetInsertPoint(endBlock);
-
-    return visitChildren(ctx);
+    
+    return nullptr;
+    // return visitChildren(ctx);
 }
 
 std::any finalVisitorImpl::visitIfelse(finalParser::IfelseContext *ctx){
@@ -157,9 +159,9 @@ std::any finalVisitorImpl::visitPrint(finalParser::PrintContext *ctx){
 
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(*context, "entry", F);
     builder->SetInsertPoint(BB);
-
+    // std::cout<<"ValuePrint\n";
     llvm::Value *val = std::any_cast<llvm::Value *>(visit(ctx->expression()));
-    
+    // std::cout<<"ValuePrint2\n";
     builder->CreateRet(val);
 	return nullptr;
 }
@@ -232,7 +234,7 @@ std::any finalVisitorImpl::visitPlusMinus(finalParser::PlusMinusContext *ctx){
 }
 
 std::any finalVisitorImpl::visitIdentifier(finalParser::IdentifierContext *ctx){
-    std::cout<<"identifier\n";
+    // std::cout<<"identifier\n";
     std::string key = ctx->ID()->getText();
     if(memory.count(key)) return std::any(memory[key]);
     return std::any(nullptr);
