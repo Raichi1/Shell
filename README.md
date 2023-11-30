@@ -18,6 +18,12 @@ Ejecute el programa principal y podrá acceder a las funcionalidades del shell. 
 Para el desarrollo del analizador léxico y sintactico empleamos la herramienta de ANTLR4 con el objetivo de definir la estructura de nuestro trabajo.
 ![image](https://github.com/Raichi1/Shell/assets/114627641/8b310c01-179a-41cd-9fbd-a8b2401e8d82)
 
+![image](https://github.com/Raichi1/Shell/assets/114627641/02fed3a3-3f09-49da-9429-9d33c46e5857)
+
+![image](https://github.com/Raichi1/Shell/assets/114627641/f10fbc2b-3417-4894-b157-3fdf4bb2ba7d)
+
+![image](https://github.com/Raichi1/Shell/assets/114627641/06c83639-bd98-4eac-bf6f-edd9d9842f26)
+
 ## Requerimientos
 Para ejecutar el programa necesitas tener cmake, llvm 17, cplusplus y antlr4.
 ## Uso
