@@ -1,8 +1,8 @@
 # Shell
-## Members
+## Integrantes
 - Renzo Andree Espíritu Cueva
 - Sebastian Aaron Guevara Dominguez
-## Index
+## Índice
 - [Shell](#Shell)
 	- [Members](#Members)
 	- [Índice](#Index)
@@ -10,28 +10,31 @@
  	- [Features](#Features) 
 	- [Requirements](#Requirements)
  	- [Use](#Use)
-## Description
-A shell is a command-line interface that serves as an intermediary between the user and the operating system, allowing users to interact with the system by executing commands. It provides a way to launch programs, manage files, and perform various tasks by interpreting user input. Shells can offer scripting capabilities, customization through configuration files, and access to a wide range of system utilities, making them a fundamental component of operating systems for both novice and advanced users.
-## Features
-Run the main program and you can access the shell functionalities. For example, you can move between folders, list documents, create folders, files, etc. In addition, by entering the command '<block>' you can execute loops, functions, conditional structures, etc. Finally, you can define the variables you are going to work with.
-## Requirements
-To run the program you need to have cmake, llvm 17, cplusplus and antlr4.
-## Use
-First, you need to go to the folder containing the .g4 file. Then, run the antlr4 (.g4) file with the following command:
+## Descripción
+Un shell es una interfaz de línea de comandos que sirve de intermediario entre el usuario y el sistema operativo, permitiendo a los usuarios interactuar con el sistema mediante la ejecución de comandos. Proporciona una forma de lanzar programas, gestionar archivos y realizar diversas tareas interpretando la entrada del usuario. Los shells pueden ofrecer capacidades de scripting, personalización mediante archivos de configuración y acceso a una amplia gama de utilidades del sistema, lo que los convierte en un componente fundamental de los sistemas operativos tanto para usuarios principiantes como avanzados.
+## Características
+Ejecute el programa principal y podrá acceder a las funcionalidades del shell. Por ejemplo, puedes moverte entre carpetas, listar documentos, crear carpetas, ficheros, etc. Además, introduciendo el comando <block> puedes ejecutar bucles, funciones, estructuras condicionales, etc. Por último, puedes definir las variables con las que vas a trabajar.
+## Lexer & Parser
+Para el desarrollo del analizador léxico y sintactico empleamos la herramienta de ANTLR4 con el objetivo de definir la estructura de nuestro trabajo.
+![image](https://github.com/Raichi1/Shell/assets/114627641/8b310c01-179a-41cd-9fbd-a8b2401e8d82)
+
+## Requerimientos
+Para ejecutar el programa necesitas tener cmake, llvm 17, cplusplus y antlr4.
+## Uso
+En primer lugar, debe ir a la carpeta que contiene el archivo .g4. A continuación, ejecute el archivo antlr4 (.g4) con el siguiente comando:
 
 	antlr4 -no-listener -visitor -o libs -Dlanguage=Cpp *.g4
 
-Second, in the main directory you must execute the following command to have the cmake (build) folder:
+En segundo lugar, en el directorio principal debe ejecutar el siguiente comando para tener la carpeta cmake (build):
 
 	cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=1
  
-Finally, to get the program file you need to run
-
+Por último, para obtener el archivo de programa es necesario ejecutar
 	cmake --build build -j8
- then,
+ Luego,
  
  	build/prog
   
-  and Felicidad.
+ y ejecuta.
 
   
