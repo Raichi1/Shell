@@ -9,6 +9,7 @@
 	- [Descripción](#Descripción)
  	- [Características](#Características)
   	- [Lexer & Parser](#Lexer&Parser)
+  	- [Visitors](#Visitors)
 	- [Requisitos](#Requisitos)
  	- [Uso](#Uso)
 ## Descripción
