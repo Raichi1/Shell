@@ -26,6 +26,13 @@ Para el desarrollo del analizador léxico y sintactico empleamos la herramienta 
 
 ![image](https://github.com/Raichi1/Shell/assets/114627641/06c83639-bd98-4eac-bf6f-edd9d9842f26)
 
+## Visitors
+Para hacer funcionales nuestras reglas gramaticales a partir de la construcción del AST generado por ANTLR4, empleamos el lenguaje de C++ para realizar dichas funciones que nos permiten ofrecer un sistema completo.
+
+![image](https://github.com/Raichi1/Shell/assets/114627641/5267f980-3250-465a-a6b8-bb5a15f71430)
+
+![image](https://github.com/Raichi1/Shell/assets/114627641/25f25229-cf9a-46a7-99a5-525bbef5101a)
+
 ## Requisitos
 Para ejecutar el programa necesitas tener cmake, llvm 17, cplusplus y antlr4.
 ## Uso
